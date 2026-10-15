@@ -1,21 +1,17 @@
-import Image from "next/image";
 import { Fragment } from "react";
 import { contato, hero, marca } from "@/data/site";
 import FadeIn from "./FadeIn";
+import HeroFoto from "./HeroFoto";
 import { ArrowIcon, MapPinIcon } from "./Icons";
 import Titulo from "./Titulo";
 
 export default function Hero() {
   return (
     <section id="inicio" className="pt-24 pb-20 sm:pt-32 md:pb-28">
-      <div className="container-site grid items-center gap-10 md:grid-cols-[1.15fr_1fr] md:gap-12">
-        <FadeIn className="mx-auto md:order-last">
-          <div className="rounded-full border border-cafe/15 p-2 sm:p-3">
-            <div className="relative size-52 overflow-hidden rounded-full bg-nude sm:size-72 lg:size-100">
-              <Image src={hero.imagem.src} alt={hero.imagem.alt} fill priority sizes="(min-width: 1024px) 25rem, (min-width: 640px) 18rem, 13rem" className="object-cover" />
-            </div>
-          </div>
-        </FadeIn>
+      <div className="container-site grid items-center gap-12 md:grid-cols-[1.15fr_1fr] md:gap-12">
+        <div className="mx-auto md:order-last">
+          <HeroFoto imagem={hero.imagem} />
+        </div>
 
         <div className="text-center md:text-left">
           <FadeIn delay={0.1}>
