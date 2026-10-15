@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@theme {
+  --color-nude: #efe4d6;
+  --color-offwhite: #faf7f2;
+  --color-cafe: #4a3a2f;
+  --color-rose: #d4a9a5; /* só para detalhes */
+  --color-bolha: #2a2421;
+  --color-estrela: #efb93f;
+
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-playfair), Georgia, serif;
+
+  --shadow-soft: 0 18px 50px -20px rgb(74 58 47 / 0.25);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 4.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  @apply bg-offwhite font-sans text-cafe antialiased;
+}
+
+::selection {
+  @apply bg-nude text-cafe;
+}
+
+@utility container-site {
+  @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+}
+
+@utility section-y {
+  @apply py-20 sm:py-28;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
