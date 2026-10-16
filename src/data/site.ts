@@ -33,6 +33,15 @@ export type Depoimento = {
   nome: string;
   texto: string;
   estrelas: number;
+  /** Por onde a mensagem chegou */
+  origem: "instagram" | "whatsapp";
+};
+
+export type Destaque = {
+  valor: number;
+  prefixo?: string;
+  sufixo?: string;
+  label: string;
 };
 
 export type Horario = {
@@ -91,10 +100,10 @@ export const seo = {
 /* ------------------------------------------------------------------ */
 
 export const navegacao: NavItem[] = [
+  { label: "Estúdio", href: "#estudio" },
   { label: "Nails", href: "#nails" },
   { label: "Valores", href: "#valores" },
   { label: "Clientes", href: "#clientes" },
-  { label: "Estúdio", href: "#estudio" },
   { label: "Agenda", href: "#agenda" },
 ];
 
@@ -110,7 +119,7 @@ export const header = {
 
 export const hero = {
   especialidades: ["Alongamento", "banho em gel", "blindagem"],
-  cidade: "Vilhena-RO",
+  cidade: "Vilhena - RO",
   cta: "Agende seu horário",
   imagem: {
     src: "/images/hero.svg",
@@ -152,22 +161,41 @@ export const servicos = {
 export const depoimentos = {
   id: "clientes",
   titulo: { texto: "Momento", complemento: "feedback" } satisfies Titulo,
+  texto: "O carinho de quem já passou por aqui. Arraste as mensagens para o lado e veja o que as clientes dizem.",
   estrelasLabel: (n: number) => `${n} de 5 estrelas`,
+  origens: {
+    instagram: "Mensagem recebida pelo Instagram",
+    whatsapp: "Mensagem recebida pelo WhatsApp",
+  },
+  digitando: "digitando",
+  dica: "Arraste para o lado",
+  anterior: "Mensagem anterior",
+  proxima: "Próxima mensagem",
+  irPara: (n: number) => `Ver mensagem ${n}`,
   itens: [
     {
       nome: "Lorem Ipsum",
       texto: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae elit libero, a pharetra augue.",
       estrelas: 5,
+      origem: "instagram",
     },
     {
       nome: "Dolor Sit",
       texto: "Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Donec id elit non mi porta.",
       estrelas: 5,
+      origem: "whatsapp",
     },
     {
       nome: "Amet Consectetur",
       texto: "Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.",
       estrelas: 5,
+      origem: "instagram",
+    },
+    {
+      nome: "Vestibulum Ante",
+      texto: "Cras mattis consectetur purus sit amet fermentum. Morbi leo risus, porta ac consectetur ac.",
+      estrelas: 5,
+      origem: "whatsapp",
     },
   ] satisfies Depoimento[],
 };
@@ -178,15 +206,30 @@ export const estudio = {
   saudacao: "Prazer, eu sou a Talita.",
   texto:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus, posuere velit aliquet. Maecenas faucibus mollis interdum.",
+  diferenciais: [
+    "Materiais de alta qualidade",
+    "Ferramentas esterilizadas e biossegurança",
+    "Atendimento exclusivo, só com hora marcada",
+  ],
+  // Números fictícios: troque pelos reais
+  destaques: [
+    { valor: 5, sufixo: "+", label: "anos de experiência" },
+    { valor: 1000, sufixo: "+", label: "clientes atendidas" },
+    { valor: 10, sufixo: "+", label: "cursos e especializações" },
+  ] satisfies Destaque[],
   imagem: {
     src: "/images/estudio.svg",
     alt: "Estúdio da Talita Kriger em Vilhena - RO",
+  } satisfies Imagem,
+  foto: {
+    src: "/images/hero.svg",
+    alt: "Talita Kriger no estúdio",
   } satisfies Imagem,
 };
 
 export const agenda = {
   id: "agenda",
-  titulo: { texto: "Agenda", complemento: "seu horário" } satisfies Titulo,
+  titulo: { texto: "Agende", complemento: "seu horário" } satisfies Titulo,
   aviso: "Atendimento somente com hora marcada",
   cta: "Agendar pelo WhatsApp",
   comoChegar: "Como chegar",

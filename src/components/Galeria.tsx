@@ -3,10 +3,11 @@
 import { AnimatePresence, motion, type PanInfo } from "framer-motion";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
-import { contato, galeria } from "@/data/site";
+import { contato, galeria, type Imagem } from "@/data/site";
 import FadeIn from "./FadeIn";
 import { ArrowIcon, ChevronIcon, CloseIcon, ExpandIcon } from "./Icons";
 import Titulo from "./Titulo";
+import useInclinacao from "./useInclinacao";
 
 const LIMITE_ARRASTE = 80;
 
@@ -16,10 +17,61 @@ const slide = {
   sair: (direcao: number) => ({ opacity: 0, x: direcao * -60 }),
 };
 
+type CartaoFotoProps = {
+  imagem: Imagem;
+  apagada: boolean;
+  onFocar: () => void;
+  onAbrir: () => void;
+};
+
+function CartaoFoto({ imagem, apagada, onFocar, onAbrir }: CartaoFotoProps) {
+  const { ativo, estilo, brilho, eventos } = useInclinacao(10);
+
+  return (
+    <div className="perspective-[800px]">
+      <motion.button
+        type="button"
+        {...eventos}
+        onPointerEnter={onFocar}
+        onFocus={onFocar}
+        onClick={onAbrir}
+        aria-label={imagem.alt}
+        style={estilo}
+        whileTap={{ scale: 0.95 }}
+        className={`group relative block aspect-square w-full overflow-hidden rounded-xl bg-nude shadow-sm transition-[opacity,filter,box-shadow] duration-500 hover:z-10 hover:shadow-soft focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cafe sm:rounded-2xl ${
+          apagada ? "opacity-50 saturate-50" : ""
+        }`}
+      >
+        <Image
+          src={imagem.src}
+          alt={imagem.alt}
+          fill
+          sizes="(min-width: 768px) 16rem, 33vw"
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-110 group-focus-visible:scale-110"
+        />
+        {ativo && (
+          <motion.span
+            aria-hidden
+            style={{ background: brilho }}
+            className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          />
+        )}
+        <span
+          aria-hidden
+          className="absolute right-2 bottom-2 grid size-8 scale-75 place-items-center rounded-full bg-offwhite/90 text-cafe opacity-0 transition duration-500 group-hover:scale-100 group-hover:opacity-100 group-focus-visible:scale-100 group-focus-visible:opacity-100 sm:size-10"
+        >
+          <ExpandIcon className="size-4" />
+        </span>
+      </motion.button>
+    </div>
+  );
+}
+
 export default function Galeria() {
   const { imagens, lightbox } = galeria;
   const total = imagens.length;
   const [[ativa, direcao], setEstado] = useState<[number | null, number]>([null, 0]);
+  const [focada, setFocada] = useState<number | null>(null);
 
   const abrir = (i: number) => setEstado([i, 0]);
   const fechar = useCallback(() => setEstado([null, 0]), []);
@@ -50,38 +102,22 @@ export default function Galeria() {
   }, [ativa, fechar, navegar]);
 
   return (
-    <section id={galeria.id} className="section-y bg-nude">
+    <section id={galeria.id} className="section-y">
       <div className="container-site">
         <FadeIn className="mb-12 text-center sm:mb-16">
           <Titulo {...galeria.titulo} />
         </FadeIn>
 
-        <ul className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3">
+        <ul className="mx-auto grid max-w-3xl grid-cols-3 gap-2 sm:gap-4" onPointerLeave={() => setFocada(null)}>
           {imagens.map((img, i) => (
             <li key={img.src}>
               <FadeIn delay={(i % 3) * 0.08}>
-                <button
-                  type="button"
-                  onClick={() => abrir(i)}
-                  aria-label={img.alt}
-                  className="group relative block aspect-4/5 w-full overflow-hidden rounded-2xl bg-offwhite shadow-sm transition-shadow duration-500 hover:shadow-soft focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cafe sm:rounded-3xl"
-                >
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    fill
-                    sizes="(min-width: 768px) 33vw, 50vw"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-110 group-focus-visible:scale-110"
-                  />
-                  <span
-                    aria-hidden
-                    className="absolute inset-0 grid place-items-center bg-cafe/0 transition-colors duration-500 group-hover:bg-cafe/35 group-focus-visible:bg-cafe/35"
-                  >
-                    <span className="grid size-12 scale-75 place-items-center rounded-full bg-offwhite/90 text-cafe opacity-0 transition duration-500 group-hover:scale-100 group-hover:opacity-100 group-focus-visible:scale-100 group-focus-visible:opacity-100">
-                      <ExpandIcon className="size-5" />
-                    </span>
-                  </span>
-                </button>
+                <CartaoFoto
+                  imagem={img}
+                  apagada={focada !== null && focada !== i}
+                  onFocar={() => setFocada(i)}
+                  onAbrir={() => abrir(i)}
+                />
               </FadeIn>
             </li>
           ))}

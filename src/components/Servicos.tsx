@@ -5,7 +5,7 @@ import Titulo from "./Titulo";
 
 export default function Servicos() {
   return (
-    <section id={servicos.id} className="section-y">
+    <section id={servicos.id} className="section-y bg-nude">
       <div className="container-site max-w-4xl">
         <FadeIn className="mb-12 text-center sm:mb-16">
           <Titulo {...servicos.titulo} />
