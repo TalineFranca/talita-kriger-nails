@@ -17,7 +17,10 @@ export default function WhatsAppButton() {
       transition={{ delay: 1, duration: 0.5 }}
       className="fixed right-5 bottom-5 z-30 grid size-14 place-items-center rounded-full bg-cafe text-offwhite shadow-soft border-2 border-offwhite transition-transform hover:scale-105 sm:right-8 sm:bottom-8"
     >
-      <WhatsAppIcon className="size-7" />
+      {/* Ondas pulsando em volta do botão */}
+      <span aria-hidden className="absolute inset-0 rounded-full bg-[#25D366] opacity-60 motion-safe:animate-ping" />
+      <span aria-hidden className="absolute -inset-1 rounded-full border-2 border-[#25D366] motion-safe:animate-pulse" />
+      <WhatsAppIcon className="relative size-7" />
     </motion.a>
   );
 }
